@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "578192099583",
+    "firebase_url": "https://pneuzin-reviews-default-rtdb.firebaseio.com",
+    "project_id": "pneuzin-reviews",
+    "storage_bucket": "pneuzin-reviews.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578192099583:android:09265cfac6b294bda264ca",
+        "android_client_info": {
+          "package_name": "com.john404.pneureviews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578192099583-9g252vvv6r0d10gbe039d5ullt40u510.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.john404.pneureviews",
+            "certificate_hash": "8e4e1aa56755a6c857612dffed114d32f6693c01"
+          }
+        },
+        {
+          "client_id": "578192099583-t3fou6666f9338k1qs62psfkbodi6aie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC82Z7BpLZ2uzT_vFf702UP6_rDitWUFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578192099583-t3fou6666f9338k1qs62psfkbodi6aie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
