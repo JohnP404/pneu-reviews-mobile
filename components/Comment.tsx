@@ -1,27 +1,38 @@
 import { View, Text, Image, Pressable } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { Auth } from "@/store/Auth";
+import { CommentsContext } from "@/store/CommentStore";
 
 type Props = {
 	data: ReviewComment;
-	toggleDeletePopup: () => void;
-	setCurrentComment: (ids: Ids) => void;
 };
 
-export default function Comment({
-	data,
-	toggleDeletePopup,
-	setCurrentComment,
-}: Props) {
+export default function Comment({ data }: Props) {
 	const { user } = Auth();
+	const { editingCommentId, setEditing, showPopup, setInput, setComment } =
+		CommentsContext();
 
 	function deleteHandler() {
-		setCurrentComment({ reviewId: data.reviewId, commentId: data.id });
-		toggleDeletePopup();
+		setComment({ id: data.id, value: data.comment });
+		showPopup(true);
+	}
+
+	function editHandler() {
+		if (editingCommentId) {
+			setEditing("");
+		} else {
+			setEditing(data.id);
+		}
+		setComment({ id: data.id, value: data.comment });
+		setInput(editingCommentId === data.id ? "" : data.comment);
 	}
 
 	return (
-		<View className="bg-slate-800 p-3 rounded-md mb-2">
+		<View
+			className={`${
+				editingCommentId === data.id ? "bg-slate-600" : "bg-slate-800"
+			} p-3 rounded-md mb-2`}
+		>
 			<View className="flex-row items-center mb-2">
 				<Image
 					className="rounded-full mr-2"
@@ -43,9 +54,16 @@ export default function Comment({
 							<Entypo name="trash" color={"red"} />
 							<Text className="text-red-600 ml-1">Deletar</Text>
 						</Pressable>
-						<Pressable className="flex-row items-center">
+						<Pressable
+							onPress={editHandler}
+							className="flex-row items-center"
+						>
 							<Entypo name="pencil" color={"rgb(0,150,255)"} />
-							<Text className="text-blue-400 ml-1">Editar</Text>
+							<Text className="text-blue-400 ml-1">
+								{editingCommentId === data.id
+									? "Cancelar"
+									: "Editar"}
+							</Text>
 						</Pressable>
 					</View>
 				)}

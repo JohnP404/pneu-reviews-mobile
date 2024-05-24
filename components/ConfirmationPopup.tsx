@@ -1,23 +1,20 @@
 import { View, Text } from "react-native";
 import { Button } from "./button";
 import { deleteComment } from "@/db/write";
+import { CommentsContext } from "@/store/CommentStore";
 
 type Props = {
-	toggleDeletePopup: () => void;
-	id: Ids;
 	confirmationText: string;
 };
 
-export default function ConfirmationPopup({
-	toggleDeletePopup,
-	confirmationText,
-	id,
-}: Props) {
+export default function ConfirmationPopup({ confirmationText }: Props) {
+	const { showPopup, currentComment, reviewId } = CommentsContext();
+
 	function deleteHandler() {
-		const { reviewId, commentId } = id;
-		deleteComment(reviewId, commentId);
-		toggleDeletePopup();
+		deleteComment(reviewId, currentComment.id);
+		showPopup(false);
 	}
+
 	return (
 		<>
 			<View className="z-20 absolute top-0 bottom-0 right-0 left-0 bg-black/70" />
@@ -33,7 +30,7 @@ export default function ConfirmationPopup({
 						<Text className="text-white">Deletar</Text>
 					</Button>
 					<Button
-						onPress={toggleDeletePopup}
+						onPress={() => showPopup(false)}
 						styles="bg-blue-500 ml-4"
 					>
 						<Text className="text-white">Cancelar</Text>

@@ -64,11 +64,11 @@ export const MOCK_COMMENTS = [
 
 export default function Review() {
 	const { id } = useLocalSearchParams();
-	const [review, setReview] = useState<Review>();
+	const [review, setReview] = useState<Review>(MOCK_DATA);
 	const [comments, setComments] = useState<ReviewComment[] | null>(
 		MOCK_COMMENTS
 	);
-	const [loading, setloading] = useState(true);
+	const [loading, setloading] = useState(false);
 
 	useEffect(() => {
 		setloading(true);

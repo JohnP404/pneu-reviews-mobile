@@ -4,20 +4,30 @@ import Comment from "@/components/Comment";
 import { Button } from "@/components/button";
 import { db } from "@/db/read";
 import { useLocalSearchParams } from "expo-router";
-import { writeComment } from "@/db/write";
+import { updateComment, writeComment } from "@/db/write";
 import { Auth } from "@/store/Auth";
 import { MOCK_COMMENTS } from ".";
 import ConfirmationPopup from "@/components/ConfirmationPopup";
+import { CommentsContext } from "@/store/CommentStore";
 
 export default function comments() {
-	const [comments, setComments] = useState<ReviewComment[]>();
-	const [currentComment, setCurrentComment] = useState<Ids | any>();
-	const [input, setInput] = useState("");
-	const [showDeletePopup, setShowDeletePopup] = useState(false);
+	const [comments, setComments] = useState<ReviewComment[]>(MOCK_COMMENTS);
+
+	const {
+		editingCommentId,
+		currentComment,
+		popupShown,
+		inputValue,
+		setReview,
+		setInput,
+		setEditing,
+	} = CommentsContext();
+
 	const { user } = Auth();
 	const { id } = useLocalSearchParams();
 
 	useEffect(() => {
+		setReview(id as string);
 		db.ref(`/reviews/${id}/comments`).on("value", (data) => {
 			if (data.exists()) {
 				const commentsData = data.val();
@@ -34,41 +44,31 @@ export default function comments() {
 
 	function uploadComment() {
 		if (!(typeof id === "string") || !user) return;
-		writeComment(id, user, input);
-		setInput("");
-	}
 
-	function toggleDeletePopup() {
-		setShowDeletePopup((s) => !s);
-	}
-	function setComment(ids: Ids) {
-		setCurrentComment(ids);
+		if (editingCommentId) {
+			updateComment(id, currentComment.id, inputValue);
+			setEditing("");
+		} else {
+			writeComment(id, user, inputValue);
+		}
+		setInput("");
 	}
 
 	return (
 		<View className="p-4 bg-black flex-1 relative">
-			{showDeletePopup && (
-				<ConfirmationPopup
-					id={currentComment}
-					confirmationText="Seu comentário será deletado para sempre"
-					toggleDeletePopup={toggleDeletePopup}
-				/>
+			{popupShown && (
+				<ConfirmationPopup confirmationText="Seu comentário será deletado para sempre" />
 			)}
 			<FlatList
 				data={comments}
 				renderItem={({ item, index }) => (
-					<Comment
-						setCurrentComment={setComment}
-						toggleDeletePopup={toggleDeletePopup}
-						data={item}
-						key={index}
-					/>
+					<Comment data={item} key={index} />
 				)}
 			/>
 			<View className="flex-row justify-between">
 				<View className="flex-1">
 					<TextInput
-						value={input}
+						value={inputValue}
 						onChangeText={(txt) => setInput(txt)}
 						placeholder="Digite seu comentário..."
 						placeholderTextColor={"rgb(156 163 175)"}

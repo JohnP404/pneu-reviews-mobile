@@ -44,6 +44,21 @@ export function writeComment(reviewId: string, user: User, comment: string) {
 	}
 }
 
+export function updateComment(
+	reviewId: string,
+	commentId: string,
+	comment: string
+) {
+	try {
+		const updates = {};
+		//@ts-ignore
+		updates[`/reviews/${reviewId}/comments/${commentId}/comment`] = comment;
+		return db.ref().update(updates);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 export function deleteComment(reviewId: string, commentId: string) {
 	try {
 		const updates = {};
