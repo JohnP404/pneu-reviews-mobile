@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 SplashScreen.preventAutoHideAsync();
 
 export default function Page() {
-	const { user, signIn, signOut } = Auth();
+	const { user, signIn } = Auth();
 	const [fontsLoaded, fontError] = useFonts({
 		Poppins: require("../assets/fonts/Poppins-Regular.ttf"),
 		"Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -62,11 +62,6 @@ export default function Page() {
 						<Button onPress={authHandler}>
 							<Text className="text-white font-[Poppins-Medium]">
 								{user ? "Ver Reviews" : "Inscreva-se"}
-							</Text>
-						</Button>
-						<Button styles="mt-2" onPress={signOut}>
-							<Text className="text-white font-[Poppins-Medium]">
-								Logout
 							</Text>
 						</Button>
 					</View>

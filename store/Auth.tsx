@@ -15,9 +15,16 @@ import { writeUser } from "@/db/write";
 
 type Context = {
 	user: User | null;
+	isAdmin: boolean;
 	signIn: () => Promise<FirebaseAuthTypes.UserCredential>;
 	signOut: () => Promise<void>;
 };
+
+const adminEmails = [
+	"jonathanpetersen2016@gmail.com",
+	"yodayo916@gmail.com",
+	"romuloodorico@gmail.com",
+];
 
 GoogleSignin.configure({
 	webClientId:
@@ -28,9 +35,11 @@ const authContext = createContext<Context | null>(null);
 export function AuthProvider({ children }: Props) {
 	const [user, setUser] = useState<User | any>(null);
 	const [initializing, setInitializing] = useState(true);
+	const [isAdmin, setAdmin] = useState(false);
 
 	function onAuthStateChanged(user: any) {
 		setUser(user);
+		setAdmin(adminEmails.includes(user.email));
 		if (user) writeUser(user);
 		if (initializing) setInitializing(false);
 	}
@@ -55,7 +64,7 @@ export function AuthProvider({ children }: Props) {
 	}
 
 	return (
-		<authContext.Provider value={{ user, signIn, signOut }}>
+		<authContext.Provider value={{ user, isAdmin, signIn, signOut }}>
 			{children}
 		</authContext.Provider>
 	);

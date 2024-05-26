@@ -7,17 +7,11 @@ export default function DrawerLayout() {
 			<Drawer
 				screenOptions={{
 					headerShown: false,
-					swipeEdgeWidth: 50,
+					swipeEdgeWidth: -20,
 					drawerLabelStyle: { color: "white", fontSize: 20 },
 					drawerStyle: { backgroundColor: "#0f172a" },
 				}}
 			>
-				<Drawer.Screen
-					name="index"
-					options={{
-						drawerLabel: "Perfil",
-					}}
-				/>
 				<Drawer.Screen
 					name="(tabs)"
 					options={{

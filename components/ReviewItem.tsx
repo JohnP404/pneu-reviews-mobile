@@ -1,6 +1,8 @@
 import { View, Text, Image, ScrollView, Pressable } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
+import ReviewOptions from "./ReviewOptions";
+import { AppContext } from "@/store/AppStore";
 
 type Props = {
 	data: Review;
@@ -8,7 +10,16 @@ type Props = {
 
 export function ReviewThumb({ data }: Props) {
 	const [pressed, setPressed] = useState(false);
+	const [longPressed, setLongPressed] = useState(false);
 	const { image, title, tags, uid } = data;
+	const { setReview } = AppContext();
+
+	function longPressHandler() {
+		if (uid) {
+			setReview(uid);
+			setLongPressed((state) => !state);
+		}
+	}
 
 	return (
 		<View
@@ -19,6 +30,7 @@ export function ReviewThumb({ data }: Props) {
 			}  mb-6`}
 		>
 			<Pressable
+				onLongPress={longPressHandler}
 				onPress={() => {
 					router.push({
 						pathname: "review/[id]",
@@ -28,6 +40,7 @@ export function ReviewThumb({ data }: Props) {
 				onPressIn={() => setPressed(true)}
 				onPressOut={() => setPressed(false)}
 			>
+				{longPressed && <ReviewOptions />}
 				<Image
 					className="rounded-t-md"
 					source={{ uri: image }}

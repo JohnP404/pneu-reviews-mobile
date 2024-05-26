@@ -5,7 +5,7 @@ type CurrentComment = {
 	value: string;
 };
 
-type CommentContext = {
+type AppContext = {
 	inputValue: string;
 	reviewId: string;
 	currentComment: CurrentComment;
@@ -18,9 +18,9 @@ type CommentContext = {
 	setEditing: (commentId: string) => void;
 };
 
-const commentsContext = createContext<CommentContext | null>(null);
+const appContext = createContext<AppContext | null>(null);
 
-export function CommentsProvider({ children }: { children: ReactNode }) {
+export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [currentComment, setCurrentComment] = useState<
 		CurrentComment | any
 	>();
@@ -62,12 +62,7 @@ export function CommentsProvider({ children }: { children: ReactNode }) {
 		setEditing,
 	};
 
-	return (
-		<commentsContext.Provider value={value}>
-			{children}
-		</commentsContext.Provider>
-	);
+	return <appContext.Provider value={value}>{children}</appContext.Provider>;
 }
 
-export const CommentsContext = () =>
-	useContext(commentsContext) as CommentContext;
+export const AppContext = () => useContext(appContext) as AppContext;

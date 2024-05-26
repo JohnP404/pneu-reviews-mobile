@@ -1,19 +1,17 @@
 import { View, Text } from "react-native";
 import { Button } from "./button";
-import { deleteComment } from "@/db/write";
-import { CommentsContext } from "@/store/CommentStore";
+import { AppContext } from "@/store/AppStore";
 
 type Props = {
 	confirmationText: string;
+	deleteHandler: () => void;
 };
 
-export default function ConfirmationPopup({ confirmationText }: Props) {
-	const { showPopup, currentComment, reviewId } = CommentsContext();
-
-	function deleteHandler() {
-		deleteComment(reviewId, currentComment.id);
-		showPopup(false);
-	}
+export default function ConfirmationPopup({
+	confirmationText,
+	deleteHandler,
+}: Props) {
+	const { showPopup } = AppContext();
 
 	return (
 		<>

@@ -1,7 +1,7 @@
 import { View, Text, Image, Pressable } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { Auth } from "@/store/Auth";
-import { CommentsContext } from "@/store/CommentStore";
+import { AppContext } from "@/store/AppStore";
 
 type Props = {
 	data: ReviewComment;
@@ -10,9 +10,9 @@ type Props = {
 export default function Comment({ data }: Props) {
 	const { user } = Auth();
 	const { editingCommentId, setEditing, showPopup, setInput, setComment } =
-		CommentsContext();
+		AppContext();
 
-	function deleteHandler() {
+	function setCurrentComment() {
 		setComment({ id: data.id, value: data.comment });
 		showPopup(true);
 	}
@@ -48,7 +48,7 @@ export default function Comment({ data }: Props) {
 				{data.user.email === user?.email && (
 					<View className="flex-row items-center gap-3 ml-auto self-start">
 						<Pressable
-							onPress={deleteHandler}
+							onPress={setCurrentComment}
 							className="flex-row items-center"
 						>
 							<Entypo name="trash" color={"red"} />

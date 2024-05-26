@@ -24,6 +24,40 @@ export function writeUser(data: User) {
 	}
 }
 
+export function writeReview(data: Review) {
+	try {
+		const updates = {};
+		const reviewKey = db.ref().child("reviews").push().key;
+		//@ts-ignore
+		updates[`/reviews/${reviewKey}`] = data;
+		return db.ref().update(updates);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+export function deleteReview(reviewId: string) {
+	try {
+		const updates = {};
+		//@ts-ignore
+		updates[`/reviews/${reviewId}`] = null;
+		return db.ref().update(updates);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+export function updateReview(reviewId: string, data: Review) {
+	try {
+		const updates = {};
+		//@ts-ignore
+		updates[`/reviews/${reviewId}`] = data;
+		return db.ref().update(updates);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 export function writeComment(reviewId: string, user: User, comment: string) {
 	const commentData = {
 		comment,

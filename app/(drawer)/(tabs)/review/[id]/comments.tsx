@@ -4,24 +4,26 @@ import Comment from "@/components/Comment";
 import { Button } from "@/components/button";
 import { db } from "@/db/read";
 import { useLocalSearchParams } from "expo-router";
-import { updateComment, writeComment } from "@/db/write";
+import { deleteComment, updateComment, writeComment } from "@/db/write";
 import { Auth } from "@/store/Auth";
-import { MOCK_COMMENTS } from ".";
 import ConfirmationPopup from "@/components/ConfirmationPopup";
-import { CommentsContext } from "@/store/CommentStore";
+import { AppContext } from "@/store/AppStore";
+// import { MOCK_COMMENTS } from ".";
 
 export default function comments() {
-	const [comments, setComments] = useState<ReviewComment[]>(MOCK_COMMENTS);
+	const [comments, setComments] = useState<ReviewComment[] | null>();
 
 	const {
 		editingCommentId,
 		currentComment,
 		popupShown,
 		inputValue,
+		reviewId,
+		showPopup,
 		setReview,
 		setInput,
 		setEditing,
-	} = CommentsContext();
+	} = AppContext();
 
 	const { user } = Auth();
 	const { id } = useLocalSearchParams();
@@ -38,6 +40,8 @@ export default function comments() {
 					return commentsData[key];
 				});
 				setComments(parsedComments);
+			} else {
+				setComments(null);
 			}
 		});
 	}, []);
@@ -54,10 +58,18 @@ export default function comments() {
 		setInput("");
 	}
 
+	function deleteHandler() {
+		deleteComment(reviewId, currentComment.id);
+		showPopup(false);
+	}
+
 	return (
 		<View className="p-4 bg-black flex-1 relative">
 			{popupShown && (
-				<ConfirmationPopup confirmationText="Seu comentário será deletado para sempre" />
+				<ConfirmationPopup
+					deleteHandler={deleteHandler}
+					confirmationText="Seu comentário será deletado para sempre"
+				/>
 			)}
 			<FlatList
 				data={comments}

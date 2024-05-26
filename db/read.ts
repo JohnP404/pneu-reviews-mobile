@@ -4,11 +4,17 @@ export const db = firebase
 	.app()
 	.database("https://pneuzin-reviews-default-rtdb.firebaseio.com");
 
-export async function getReviews() {
+export function getReviews() {
+	let val: Review[] = [];
 	try {
-		const snapshot = await db.ref("/reviews").once("value");
-		if (!snapshot.exists()) console.log("No data");
-		return snapshot.val();
+		db.ref("/reviews").on("value", (data) => {
+			if (data.exists()) {
+				const reviewData = data.val();
+				const keys = Object.keys(reviewData);
+				val = keys.map((key) => reviewData[key]);
+			}
+		});
+		return val;
 	} catch (err) {
 		console.log(err);
 	}
@@ -17,6 +23,7 @@ export async function getReviews() {
 export async function getReview(id: string) {
 	try {
 		const snapshot = await db.ref(`/reviews/${id}`).once("value");
+
 		return snapshot.val();
 	} catch (err) {
 		console.log(err);
