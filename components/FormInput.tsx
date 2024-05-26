@@ -1,5 +1,4 @@
-import { Text, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { Text, View, TextInput } from "react-native";
 type Props = {
 	value: string;
 	multiline?: boolean;

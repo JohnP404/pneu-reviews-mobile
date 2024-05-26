@@ -5,7 +5,7 @@
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/images/icon.png",
-		"scheme": "my-scheme",
+		"scheme": "pneu-reviews",
 		"userInterfaceStyle": "automatic",
 		"backgroundColor": "#000000",
 		"splash": {
@@ -18,7 +18,7 @@
 		},
 		"android": {
 			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/adaptive-icon.png",
+				"foregroundImage": "./assets/images/icon.png",
 				"backgroundColor": "#000000"
 			},
 			"googleServicesFile": "./google-services.json",
