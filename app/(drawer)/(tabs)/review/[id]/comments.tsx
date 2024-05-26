@@ -12,7 +12,6 @@ import { AppContext } from "@/store/AppStore";
 
 export default function comments() {
 	const [comments, setComments] = useState<ReviewComment[] | null>();
-
 	const {
 		editingCommentId,
 		currentComment,
