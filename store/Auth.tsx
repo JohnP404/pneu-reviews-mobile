@@ -38,9 +38,11 @@ export function AuthProvider({ children }: Props) {
 	const [isAdmin, setAdmin] = useState(false);
 
 	function onAuthStateChanged(user: any) {
-		setUser(user);
-		setAdmin(adminEmails.includes(user.email));
-		if (user) writeUser(user);
+		if (user) {
+			setUser(user);
+			setAdmin(adminEmails.includes(user.email));
+			writeUser(user);
+		}
 		if (initializing) setInitializing(false);
 	}
 

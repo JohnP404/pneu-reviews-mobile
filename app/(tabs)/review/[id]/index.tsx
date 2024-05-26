@@ -5,7 +5,6 @@ import Loading from "@/components/loading";
 import Error from "@/components/error";
 import { BackBtn } from "@/components/backBtn";
 import DisplayComment from "@/components/DisplayComment";
-import { deleteReview } from "@/db/write";
 import { getReview } from "@/db/read";
 
 // const MOCK_DATA = {
@@ -89,11 +88,6 @@ export default function Review() {
 		};
 		fetchReviews();
 	}, [pathname]);
-
-	function deleteHandler() {
-		deleteReview(id as string);
-		router.replace("/");
-	}
 
 	if (loading) return <Loading />;
 	if (!review) return <Error />;
