@@ -6,6 +6,7 @@
 		},
 		"preview": {
 			"android": {
+				"image": "latest",
 				"buildType": "apk"
 			}
 		},
