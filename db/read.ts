@@ -1,4 +1,5 @@
 import { firebase } from "@react-native-firebase/database";
+import { User } from "firebase/auth";
 
 export const db = firebase
 	.app()
@@ -42,11 +43,11 @@ export function getComments(id: string) {
 	return val;
 }
 
-export function getUser(id: string) {
-	let user;
-	db.ref(`/users/${id}`).once("value", (userData) => {
+export async function getUser(id: string) {
+	let user: any;
+	await db.ref(`/users/${id}`).once("value", (userData) => {
 		if (userData.exists()) {
-			user = userData;
+			user = userData.val();
 		}
 	});
 	return user;

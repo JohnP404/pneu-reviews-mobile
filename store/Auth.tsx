@@ -12,6 +12,7 @@ type Props = {
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { writeUser } from "@/db/write";
+import { getUser } from "@/db/read";
 
 type Context = {
 	user: User | null;
@@ -19,13 +20,6 @@ type Context = {
 	signIn: () => Promise<FirebaseAuthTypes.UserCredential>;
 	signOut: () => Promise<void>;
 };
-
-const adminEmails = [
-	"jonathanpetersen2016@gmail.com",
-	"yodayo916@gmail.com",
-	"romuloodorico@gmail.com",
-	"fredbomdepica2@gmail.com",
-];
 
 GoogleSignin.configure({
 	webClientId:
@@ -38,10 +32,11 @@ export function AuthProvider({ children }: Props) {
 	const [initializing, setInitializing] = useState(true);
 	const [isAdmin, setAdmin] = useState(false);
 
-	function onAuthStateChanged(user: any) {
+	async function onAuthStateChanged(user: any) {
 		if (user) {
 			setUser(user);
-			setAdmin(adminEmails.includes(user.email));
+			const firebaseUser = await getUser(user.uid);
+			setAdmin(!!firebaseUser?.isAdmin);
 			writeUser(user);
 		}
 		if (initializing) setInitializing(false);

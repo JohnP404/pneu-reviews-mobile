@@ -6,7 +6,7 @@ import { db } from "@/db/read";
 import { deleteReview } from "@/db/write";
 import { AppContext } from "@/store/AppStore";
 import { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Text } from "react-native";
 
 // const MOCK_DATA = [
 // 	{
@@ -67,24 +67,31 @@ import { FlatList } from "react-native";
 // ];
 
 export default function Reviews() {
-	const [reviews, setReviews] = useState<Review[]>();
+	const [reviews, setReviews] = useState<Review[] | null>();
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
 	const { popupShown, showPopup, reviewId } = AppContext();
 
 	useEffect(() => {
 		setLoading(true);
-		db.ref("/reviews").on("value", (data) => {
-			if (data.exists()) {
-				const reviewData = data.val();
-				const keys = Object.keys(reviewData);
-				const val = keys.map((key) => {
-					reviewData[key].uid = key;
-					return reviewData[key];
-				});
-				setReviews(val);
-			}
-		});
-		setLoading(false);
+		try {
+			db.ref("/reviews").on("value", (data) => {
+				if (data.exists()) {
+					const reviewData = data.val();
+					const keys = Object.keys(reviewData);
+					const val = keys.map((key) => {
+						reviewData[key].uid = key;
+						return reviewData[key];
+					});
+					setReviews(val);
+				} else {
+					setReviews(null);
+				}
+				setLoading(false);
+			});
+		} catch (error) {
+			setError(true);
+		}
 	}, []);
 
 	function deleteReviewHandler() {
@@ -93,7 +100,7 @@ export default function Reviews() {
 	}
 
 	if (loading) return <Loading />;
-	if (!loading && !reviews) return <Error />;
+	if (error) return <Error />;
 
 	return (
 		<>
@@ -103,12 +110,19 @@ export default function Reviews() {
 					confirmationText="Essa review será deletada para sempre"
 				/>
 			)}
-			<FlatList
-				className="p-6 bg-black"
-				data={reviews}
-				keyExtractor={(item) => item.uid!}
-				renderItem={({ item }) => <ReviewThumb data={item} />}
-			/>
+			{!reviews && !loading && (
+				<Text className="text-white font-[Poppins] text-lg">
+					Não há reviews
+				</Text>
+			)}
+			{reviews && (
+				<FlatList
+					className="p-6 bg-black"
+					data={reviews}
+					keyExtractor={(item) => item.uid!}
+					renderItem={({ item }) => <ReviewThumb data={item} />}
+				/>
+			)}
 		</>
 	);
 }

@@ -68,29 +68,34 @@ export default function Review() {
 	const [review, setReview] = useState<Review>();
 	const [comments, setComments] = useState<ReviewComment[] | null>(null);
 	const [loading, setloading] = useState(false);
+	const [error, setError] = useState(false);
 
 	useEffect(() => {
 		setloading(true);
-		const fetchReviews = async () => {
-			const reviewData: Review = await getReview(id as string);
-			setReview(reviewData);
-			if (reviewData.comments) {
-				const commentsData = reviewData.comments;
-				const keys = Object.keys(commentsData);
-				const parsedComments = keys.map(
-					(key: any) => commentsData[key]
-				);
-				setComments(parsedComments);
-			} else {
-				setComments(null);
-			}
-			setloading(false);
-		};
-		fetchReviews();
+		try {
+			const fetchReviews = async () => {
+				const reviewData: Review = await getReview(id as string);
+				setReview(reviewData);
+				if (reviewData.comments) {
+					const commentsData = reviewData.comments;
+					const keys = Object.keys(commentsData);
+					const parsedComments = keys.map(
+						(key: any) => commentsData[key]
+					);
+					setComments(parsedComments);
+				} else {
+					setComments(null);
+				}
+				setloading(false);
+			};
+			fetchReviews();
+		} catch (error) {
+			setError(true);
+		}
 	}, [pathname]);
 
-	if (loading) return <Loading />;
-	if (!review) return <Error />;
+	if (loading || !review) return <Loading />;
+	if (error) return <Error />;
 
 	return (
 		<ScrollView stickyHeaderIndices={[0]} className="bg-black p-4">
@@ -116,7 +121,10 @@ export default function Review() {
 				Comentários
 			</Text>
 			{!comments && (
-				<Pressable onPress={() => router.push(`review/${id}/comments`)}>
+				<Pressable
+					className="mb-6"
+					onPress={() => router.push(`review/${id}/comments`)}
+				>
 					<Text className="text-white text-base bg-slate-800 p-2 rounded-md">
 						Seja o primeiro a comentar!
 					</Text>
