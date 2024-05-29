@@ -24,6 +24,7 @@ const adminEmails = [
 	"jonathanpetersen2016@gmail.com",
 	"yodayo916@gmail.com",
 	"romuloodorico@gmail.com",
+	"fredbomdepica2@gmail.com",
 ];
 
 GoogleSignin.configure({
