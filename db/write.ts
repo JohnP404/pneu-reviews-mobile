@@ -2,8 +2,8 @@ import { User } from "firebase/auth";
 import { getUser } from "./read";
 import { db } from "./read";
 
-export function writeUser(data: User) {
-	const userExists = getUser(data.uid);
+export async function writeUser(data: User) {
+	const userExists = await getUser(data.uid);
 	if (userExists) return;
 	const userData = {
 		displayName: data.displayName,
