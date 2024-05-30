@@ -4,7 +4,7 @@
 		"slug": "pneu-reviews",
 		"version": "1.2.0",
 		"orientation": "portrait",
-		"icon": "./assets/images/icon.jpeg",
+		"icon": "./assets/images/icon.png",
 		"scheme": "pneu-reviews",
 		"userInterfaceStyle": "automatic",
 		"backgroundColor": "#000000",
@@ -18,7 +18,7 @@
 		},
 		"android": {
 			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/icon.jpeg",
+				"foregroundImage": "./assets/images/icon.png",
 				"backgroundColor": "#000000"
 			},
 			"googleServicesFile": "./google-services.json",
